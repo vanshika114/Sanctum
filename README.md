@@ -1,7 +1,5 @@
 # Sanctum
 
-# Sanctum
-
 **Sanctum** is a minimal productivity web app designed to create a calm, distraction-free workspace.
 It combines a Pomodoro timer, a task manager, and motivational quotes in a clean interface to help users stay focused.
 
