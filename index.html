@@ -1,442 +1,259 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SANCTUM — No Distraction Zone</title>
+<title>SANCTUM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Meow+Script&family=Felipa&family=Annie+Use+Your+Telescope&family=Cabin+Sketch:wght@400;700&family=Foldit:wght@300;400;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
+:root {
+  --bg-void:#07070f; --bg-deep:#0b0b16; --bg-card:#10101e; --bg-raised:#161628;
+  --accent:#c8813a; --accent-glow:rgba(200,129,58,0.15); --accent-green:#4e9e78; --accent-red:#9e4e4e;
+  --text-bright:#ede8df; --text-mid:#9d96a8; --text-dim:#4e4a5a;
+  --border:rgba(255,255,255,0.06); --border-accent:rgba(200,129,58,0.28); --ring-bg:#161628;
+  --radial-1:rgba(200,129,58,0.08); --radial-2:rgba(78,158,120,0.05);
+  --grad-line:rgba(200,129,58,0.32); --shadow-card:0 4px 32px rgba(0,0,0,0.5); --noise-op:0.025;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg-void);color:var(--text-bright);font-family:'Annie Use Your Telescope',cursive;font-size:15px;overflow-x:hidden;transition:background .4s,color .4s}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 50% -10%,var(--radial-1) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 85% 80%,var(--radial-2) 0%,transparent 60%);pointer-events:none;z-index:0;transition:background .4s}
+body::after{content:'';position:fixed;inset:0;opacity:var(--noise-op);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");background-size:200px;pointer-events:none;z-index:0}
 
-/* ══════════════════════════════════════════
-   DARK THEME
-══════════════════════════════════════════ */
-[data-theme="dark"] {
-  --bg-void:      #07070f;
-  --bg-deep:      #0b0b16;
-  --bg-card:      #10101e;
-  --bg-raised:    #161628;
-  --accent:       #c8813a;
-  --accent-glow:  rgba(200,129,58,0.15);
-  --accent-green: #4e9e78;
-  --accent-red:   #9e4e4e;
-  --text-bright:  #ede8df;
-  --text-mid:     #9d96a8;
-  --text-dim:     #4e4a5a;
-  --border:       rgba(255,255,255,0.06);
-  --border-accent:rgba(200,129,58,0.28);
-  --ring-bg:      #161628;
-  --noise-op:     0.025;
-  --radial-1:     rgba(200,129,58,0.08);
-  --radial-2:     rgba(78,158,120,0.05);
-  --grad-line:    rgba(200,129,58,0.32);
-  --shadow-card:  0 4px 32px rgba(0,0,0,0.5);
-}
+/* ── HEADER ── */
+header{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--border);transition:border-color .4s}
+.logo{font-family:'Meow Script',cursive;font-size:32px;color:var(--text-bright);transition:color .4s}
+.logo span{color:var(--accent)}
+.header-actions{display:flex;align-items:center;gap:8px}
+.hdr-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg-raised);border:1px solid var(--border);border-radius:40px;color:var(--text-mid);font-family:'Annie Use Your Telescope',cursive;font-size:13px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.hdr-btn:hover{border-color:var(--border-accent);color:var(--accent)}
+.hdr-clock{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);padding:6px 12px;background:var(--bg-deep);border:1px solid var(--border);border-radius:40px}
+.hdr-clock span{color:var(--text-mid)}
 
-/* ══════════════════════════════════════════
-   LIGHT THEME  –  #FFF8F0 · #C08552 · #8C5A3C · #4B2E2B
-══════════════════════════════════════════ */
-[data-theme="light"] {
-  --bg-void:      #FFF8F0;
-  --bg-deep:      #F5EAD8;
-  --bg-card:      #FFFCF8;
-  --bg-raised:    #EDD9C0;
-  --accent:       #C08552;
-  --accent-glow:  rgba(192,133,82,0.14);
-  --accent-green: #3d7a56;
-  --accent-red:   #8b3030;
-  --text-bright:  #4B2E2B;
-  --text-mid:     #8C5A3C;
-  --text-dim:     #C09070;
-  --border:       rgba(75,46,43,0.1);
-  --border-accent:rgba(192,133,82,0.38);
-  --ring-bg:      #E8D4BC;
-  --noise-op:     0.010;
-  --radial-1:     rgba(192,133,82,0.10);
-  --radial-2:     rgba(140,90,60,0.06);
-  --grad-line:    rgba(192,133,82,0.40);
-  --shadow-card:  0 4px 24px rgba(75,46,43,0.08);
-}
+/* ── GRID ── */
+.app-grid{position:relative;z-index:10;display:grid;grid-template-columns:320px 1fr 320px;gap:18px;padding:20px 24px;max-width:1440px;margin:0 auto;align-items:start}
 
-/* ══════════════════════════════════════════
-   RESET & BASE
-══════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── CARD ── */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:18px;padding:22px;position:relative;overflow:hidden;box-shadow:var(--shadow-card);transition:background .4s,border-color .4s,box-shadow .4s}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--grad-line),transparent)}
+.card-title{font-family:'Cabin Sketch',cursive;font-size:17px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:10px;transition:color .4s}
+.card-title::after{content:'';flex:1;height:1px;background:var(--border)}
 
-html, body {
-  height: 100%;
-  background: var(--bg-void);
-  color: var(--text-bright);
-  font-family: 'Annie Use Your Telescope', cursive;
-  font-size: 15px;
-  overflow-x: hidden;
-  transition: background 0.45s, color 0.45s;
-}
+/* ── TABS (right col) ── */
+.tab-bar{display:flex;gap:4px;margin-bottom:18px;background:var(--bg-deep);padding:4px;border-radius:40px;border:1px solid var(--border)}
+.tab-btn{flex:1;padding:6px 0;border-radius:36px;border:none;background:transparent;color:var(--text-dim);font-family:'Annie Use Your Telescope',cursive;font-size:13px;cursor:pointer;transition:all .22s}
+.tab-btn.active{background:var(--bg-raised);color:var(--accent);border:1px solid var(--border-accent)}
+.tab-panel{display:none}.tab-panel.active{display:block}
 
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background:
-    radial-gradient(ellipse 60% 50% at 50% -10%, var(--radial-1) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 40% at 85% 80%,  var(--radial-2) 0%, transparent 60%);
-  pointer-events: none; z-index: 0; transition: background 0.45s;
-}
+/* ── TIMER ── */
+.timer-card{grid-column:2;display:flex;flex-direction:column;align-items:center}
+.active-task-badge{display:none;align-items:center;gap:8px;padding:7px 14px;background:var(--accent-glow);border:1px solid var(--border-accent);border-radius:40px;margin-bottom:16px;font-size:12px;color:var(--accent);max-width:100%;overflow:hidden}
+.active-task-badge.shown{display:flex}
+.active-task-badge span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.atb-clear{background:none;border:none;color:var(--accent);cursor:pointer;font-size:14px;flex-shrink:0;opacity:.7}
+.atb-clear:hover{opacity:1}
+.timer-modes{display:flex;gap:5px;margin-bottom:26px;background:var(--bg-deep);padding:5px;border-radius:50px;border:1px solid var(--border)}
+.mode-btn{padding:6px 18px;border-radius:40px;border:none;background:transparent;color:var(--text-dim);font-family:'Annie Use Your Telescope',cursive;font-size:13px;cursor:pointer;transition:all .22s;white-space:nowrap}
+.mode-btn.active{background:var(--bg-raised);color:var(--accent);border:1px solid var(--border-accent)}
+.timer-ring-wrapper{position:relative;width:256px;height:256px;margin:0 auto 26px}
+.timer-ring-svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--ring-bg);stroke-width:7;transition:stroke .4s}
+.ring-progress{fill:none;stroke:var(--accent);stroke-width:7;stroke-linecap:round;filter:drop-shadow(0 0 9px var(--accent-glow));transition:stroke-dashoffset 1s linear,stroke .5s}
+.ring-progress.brk{stroke:var(--accent-green);filter:drop-shadow(0 0 9px rgba(78,158,120,0.4))}
+.timer-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.timer-display{font-family:'Foldit',cursive;font-size:66px;font-weight:300;line-height:1;color:var(--text-bright);transition:color .4s}
+.timer-label{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-dim);margin-top:6px}
+.session-dots{display:flex;gap:5px;margin-top:8px}
+.session-dot{width:6px;height:6px;border-radius:50%;background:var(--text-dim);transition:background .3s}
+.session-dot.done{background:var(--accent)}
+.timer-controls{display:flex;gap:10px;margin-bottom:22px}
+.btn-icon{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--bg-raised);color:var(--text-mid);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.btn-icon:hover{border-color:var(--border-accent);color:var(--accent)}
+.btn-main{width:64px;height:64px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;box-shadow:0 0 28px var(--accent-glow)}
+.btn-main:hover{transform:scale(1.08)}
+.timer-settings{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%}
+.setting-box{background:var(--bg-deep);border:1px solid var(--border);border-radius:12px;padding:11px;text-align:center;transition:border-color .2s,background .4s}
+.setting-box:hover{border-color:var(--border-accent)}
+.setting-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-bottom:5px}
+.setting-value{font-family:'Foldit',cursive;font-size:24px;font-weight:300;color:var(--text-bright)}
+.setting-controls{display:flex;justify-content:center;gap:6px;margin-top:6px}
+.adj-btn{width:22px;height:22px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--text-mid);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.adj-btn:hover{border-color:var(--accent);color:var(--accent)}
 
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  opacity: var(--noise-op);
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-size: 200px; pointer-events: none; z-index: 0;
-}
+/* ── TODO ── */
+.priority-row{display:flex;gap:5px;margin-bottom:10px;align-items:center}
+.pri-lbl{font-size:11px;color:var(--text-dim);letter-spacing:.08em}
+.pri-btn{padding:3px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-dim);font-family:'Annie Use Your Telescope',cursive;font-size:12px;cursor:pointer;transition:all .18s}
+.pri-btn[data-p="high"].sel,.pri-btn[data-p="high"]:hover{border-color:#e05555;color:#e05555;background:rgba(224,85,85,.12)}
+.pri-btn[data-p="med"].sel,.pri-btn[data-p="med"]:hover{border-color:#d4880a;color:#d4880a;background:rgba(212,136,10,.12)}
+.pri-btn[data-p="low"].sel,.pri-btn[data-p="low"]:hover{border-color:#4a9ab0;color:#4a9ab0;background:rgba(74,154,176,.12)}
+.todo-input-row{display:flex;gap:7px;margin-bottom:14px}
+.todo-input{flex:1;background:var(--bg-deep);border:1px solid var(--border);border-radius:11px;padding:9px 13px;color:var(--text-bright);font-family:'Annie Use Your Telescope',cursive;font-size:14px;outline:none;transition:border-color .2s,background .4s}
+.todo-input:focus{border-color:var(--border-accent)}
+.todo-input::placeholder{color:var(--text-dim)}
+.add-btn{width:38px;height:38px;flex-shrink:0;border-radius:11px;border:1px solid var(--border-accent);background:var(--accent-glow);color:var(--accent);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.add-btn:hover{background:var(--accent);color:#fff}
+.todo-filters{display:flex;gap:4px;margin-bottom:12px}
+.filter-btn{padding:4px 12px;border-radius:20px;border:1px solid transparent;background:transparent;color:var(--text-dim);font-family:'Annie Use Your Telescope',cursive;font-size:12px;cursor:pointer;transition:all .18s}
+.filter-btn.active{border-color:var(--border-accent);color:var(--accent);background:var(--accent-glow)}
+.todo-list{display:flex;flex-direction:column;gap:7px;max-height:300px;overflow-y:auto;padding-right:3px}
+.todo-list::-webkit-scrollbar{width:3px}
+.todo-list::-webkit-scrollbar-thumb{background:var(--bg-raised);border-radius:2px}
+.todo-item{display:flex;align-items:center;gap:8px;padding:9px 11px;background:var(--bg-deep);border:1px solid var(--border);border-radius:11px;transition:all .18s;animation:slideIn .22s ease}
+@keyframes slideIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+.todo-item:hover{border-color:var(--border-accent)}
+.todo-item.done{opacity:.42}
+.todo-item.focused{border-color:var(--accent);background:var(--accent-glow)}
+.pri-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.pri-dot.high{background:#e05555}.pri-dot.med{background:#d4880a}.pri-dot.low{background:#4a9ab0}.pri-dot.none{background:transparent;border:1px solid var(--text-dim)}
+.todo-check{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--text-dim);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s;font-size:11px}
+.todo-check.chk{background:var(--accent-green);border-color:var(--accent-green);color:#fff}
+.todo-text{flex:1;font-size:13px;color:var(--text-mid);line-height:1.4;transition:color .4s;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.todo-item.done .todo-text{text-decoration:line-through}
+.todo-focus-btn{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:13px;padding:1px 3px;transition:all .18s;flex-shrink:0;opacity:0}
+.todo-item:hover .todo-focus-btn{opacity:1}
+.todo-item.focused .todo-focus-btn{opacity:1;color:var(--accent)}
+.todo-del{opacity:0;background:transparent;border:none;color:var(--accent-red);cursor:pointer;font-size:13px;padding:1px 3px;transition:opacity .18s;flex-shrink:0}
+.todo-item:hover .todo-del{opacity:1}
+.todo-stats{margin-top:12px;font-size:12px;color:var(--text-dim);display:flex;justify-content:space-between}
+.clear-done{background:none;border:none;color:var(--text-dim);font-size:12px;cursor:pointer;font-family:'Annie Use Your Telescope',cursive;transition:color .18s}
+.clear-done:hover{color:var(--accent-red)}
+.empty-state{text-align:center;padding:26px 0;color:var(--text-dim);font-size:13px}
+.empty-icon{font-size:26px;margin-bottom:8px;opacity:.35}
 
-/* ══════════════════════════════════════════
-   HEADER
-══════════════════════════════════════════ */
-header {
-  position: relative; z-index: 10;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 36px;
-  border-bottom: 1px solid var(--border);
-  transition: border-color 0.45s;
-}
+/* ── QUOTES ── */
+.quote-body{font-family:'Felipa',cursive;font-size:25px;line-height:1.62;color:var(--text-bright);margin-bottom:14px;min-height:90px;transition:opacity .4s,color .4s}
+.quote-author{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);transition:opacity .4s,color .4s}
+.quote-nav{display:flex;justify-content:flex-end;gap:5px;margin-top:14px}
+.q-btn{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.q-btn:hover{border-color:var(--border-accent);color:var(--accent)}
 
-.logo {
-  font-family: 'Meow Script', cursive;
-  font-size: 34px;
-  color: var(--text-bright);
-  letter-spacing: 0.04em;
-  line-height: 1;
-  transition: color 0.45s;
-}
-.logo span { color: var(--accent); }
+/* ── STATS PANEL ── */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.stat-box{background:var(--bg-deep);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;transition:background .4s,border-color .4s}
+.stat-number{font-family:'Foldit',cursive;font-size:34px;font-weight:300;color:var(--accent);line-height:1}
+.stat-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-top:4px}
+.streak-box{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;background:var(--bg-deep);border:1px solid var(--border);border-radius:12px}
+.streak-fire{font-size:28px}
+.streak-count{font-family:'Foldit',cursive;font-size:42px;font-weight:300;color:var(--accent)}
+.streak-text{font-size:12px;color:var(--text-dim);letter-spacing:.08em;text-transform:uppercase}
 
-.header-right {
-  display: flex; align-items: center; gap: 16px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px; color: var(--text-dim); letter-spacing: 0.08em;
-}
-#live-clock { color: var(--text-mid); }
+/* Heatmap */
+.heatmap-label{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px}
+.heatmap{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:16px}
+.hm-day{aspect-ratio:1;border-radius:3px;background:var(--bg-raised);transition:background .3s;cursor:default}
+.hm-day[title]:hover{outline:1px solid var(--border-accent)}
 
-/* ── Theme Toggle ── */
-.theme-toggle {
-  display: flex; align-items: center; gap: 8px;
-  background: var(--bg-raised);
-  border: 1px solid var(--border);
-  border-radius: 40px; padding: 5px 14px 5px 10px;
-  cursor: pointer; transition: all 0.25s;
-  color: var(--text-mid);
-  font-family: 'Annie Use Your Telescope', cursive;
-  font-size: 13px; letter-spacing: 0.06em;
-}
-.theme-toggle:hover { border-color: var(--border-accent); color: var(--accent); }
+/* Session history */
+.session-history{max-height:160px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.session-history::-webkit-scrollbar{width:3px}
+.session-history::-webkit-scrollbar-thumb{background:var(--bg-raised);border-radius:2px}
+.sess-item{display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--bg-deep);border:1px solid var(--border);border-radius:9px}
+.sess-time{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim)}
+.sess-dur{font-family:'Foldit',cursive;font-size:18px;color:var(--text-bright);min-width:44px}
+.sess-task{flex:1;font-size:12px;color:var(--text-mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mood-chip{font-size:14px}
 
-.toggle-track {
-  width: 32px; height: 18px;
-  background: var(--bg-deep);
-  border: 1px solid var(--border-accent);
-  border-radius: 20px; position: relative;
-  transition: background 0.3s; flex-shrink: 0;
-}
-[data-theme="light"] .toggle-track { background: var(--accent-glow); }
+/* ── FULL SCREEN FOCUS MODE ── */
+.focus-overlay{display:none;position:fixed;inset:0;background:var(--bg-void);z-index:200;flex-direction:column;align-items:center;justify-content:center;transition:background .4s}
+.focus-overlay.show{display:flex}
+.focus-exit{position:absolute;top:24px;right:28px;background:none;border:1px solid var(--border);color:var(--text-dim);padding:7px 16px;border-radius:40px;font-family:'Annie Use Your Telescope',cursive;font-size:13px;cursor:pointer;transition:all .2s}
+.focus-exit:hover{border-color:var(--border-accent);color:var(--accent)}
+.focus-task-text{font-size:16px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:18px;min-height:22px}
+.focus-timer{font-family:'Foldit',cursive;font-size:120px;font-weight:300;color:var(--text-bright);line-height:1;text-shadow:0 0 80px var(--accent-glow)}
+.focus-label{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--text-dim);margin-top:10px;margin-bottom:32px}
+.focus-controls{display:flex;gap:12px;margin-bottom:60px}
+.focus-quote{font-family:'Felipa',cursive;font-size:20px;color:var(--text-dim);text-align:center;max-width:480px;line-height:1.6}
+.focus-pulse{position:absolute;inset:0;background:radial-gradient(ellipse 50% 50% at 50% 50%,var(--radial-1),transparent 70%);pointer-events:none;animation:focusPulse 6s ease infinite}
+@keyframes focusPulse{0%,100%{opacity:.4}50%{opacity:1}}
 
-.toggle-thumb {
-  position: absolute; top: 2px; left: 2px;
-  width: 12px; height: 12px; border-radius: 50%;
-  background: var(--accent);
-  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-}
-[data-theme="light"] .toggle-thumb { transform: translateX(14px); }
-[data-theme="light"] .lbl-dark  { display: none; }
-[data-theme="dark"]  .lbl-light { display: none; }
+/* ── MODALS ── */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:150;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-backdrop.show{display:flex}
+.modal{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;padding:30px;width:min(480px,92vw);position:relative;box-shadow:var(--shadow-card);animation:modalIn .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes modalIn{from{opacity:0;transform:scale(.92) translateY(20px)}to{opacity:1;transform:none}}
+.modal-title{font-family:'Cabin Sketch',cursive;font-size:20px;font-weight:700;color:var(--accent);margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--text-dim);margin-bottom:24px}
+.modal-close{position:absolute;top:18px;right:20px;background:none;border:none;color:var(--text-dim);font-size:20px;cursor:pointer;transition:color .18s}
+.modal-close:hover{color:var(--accent)}
+.m-section{margin-bottom:20px}
+.m-section-label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px}
+.emoji-scale{display:flex;gap:8px;justify-content:center}
+.emo-btn{width:52px;height:52px;border-radius:14px;border:2px solid var(--border);background:var(--bg-deep);font-size:24px;cursor:pointer;transition:all .18s;display:flex;align-items:center;justify-content:center}
+.emo-btn.sel,.emo-btn:hover{border-color:var(--border-accent);background:var(--accent-glow);transform:scale(1.08)}
+.energy-scale{display:flex;gap:6px;align-items:flex-end;height:36px;justify-content:center}
+.nrg-bar{width:26px;border-radius:4px 4px 0 0;background:var(--bg-raised);border:1px solid var(--border);cursor:pointer;transition:all .18s}
+.nrg-bar.sel,.nrg-bar:hover{background:var(--accent);border-color:var(--accent)}
+.task-select{width:100%;background:var(--bg-deep);border:1px solid var(--border);border-radius:10px;padding:9px 13px;color:var(--text-bright);font-family:'Annie Use Your Telescope',cursive;font-size:14px;outline:none;cursor:pointer;transition:border-color .2s}
+.task-select:focus{border-color:var(--border-accent)}
+.task-select option{background:var(--bg-card);color:var(--text-bright)}
+.modal-textarea{width:100%;background:var(--bg-deep);border:1px solid var(--border);border-radius:10px;padding:11px 13px;color:var(--text-bright);font-family:'Annie Use Your Telescope',cursive;font-size:14px;outline:none;resize:none;line-height:1.5;transition:border-color .2s}
+.modal-textarea:focus{border-color:var(--border-accent)}
+.modal-textarea::placeholder{color:var(--text-dim)}
+.star-row{display:flex;gap:6px;justify-content:center}
+.star-btn{font-size:24px;background:none;border:none;cursor:pointer;transition:transform .15s;color:var(--text-dim);filter:grayscale(1)}
+.star-btn.lit{color:#f6ce71;filter:none}
+.star-btn:hover{transform:scale(1.2)}
+.modal-stats-row{display:flex;gap:10px;margin-bottom:20px}
+.modal-stat{flex:1;text-align:center;background:var(--bg-deep);border-radius:10px;padding:12px;border:1px solid var(--border)}
+.modal-stat-n{font-family:'Foldit',cursive;font-size:28px;color:var(--accent)}
+.modal-stat-l{font-size:11px;color:var(--text-dim);letter-spacing:.08em;text-transform:uppercase}
+.btn-primary{width:100%;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-family:'Annie Use Your Telescope',cursive;font-size:16px;cursor:pointer;transition:all .2s;margin-top:4px}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px)}
+.btn-secondary{width:100%;padding:10px;background:transparent;color:var(--text-mid);border:1px solid var(--border);border-radius:12px;font-family:'Annie Use Your Telescope',cursive;font-size:14px;cursor:pointer;transition:all .2s;margin-top:8px}
+.btn-secondary:hover{border-color:var(--border-accent);color:var(--accent)}
 
-/* ══════════════════════════════════════════
-   MAIN GRID
-══════════════════════════════════════════ */
-.app-grid {
-  position: relative; z-index: 10;
-  display: grid; grid-template-columns: 330px 1fr 330px;
-  gap: 20px; padding: 24px 28px;
-  max-width: 1440px; margin: 0 auto;
-  min-height: calc(100vh - 68px); align-items: start;
-}
+/* ── THEME PICKER ── */
+.theme-modal{width:min(580px,95vw)}
+.theme-tabs{display:flex;gap:4px;margin-bottom:18px;background:var(--bg-deep);padding:4px;border-radius:40px;border:1px solid var(--border)}
+.theme-tab{flex:1;padding:7px 0;border-radius:36px;border:none;background:transparent;color:var(--text-dim);font-family:'Annie Use Your Telescope',cursive;font-size:13px;cursor:pointer;transition:all .2s}
+.theme-tab.active{background:var(--bg-raised);color:var(--accent);border:1px solid var(--border-accent)}
+.theme-section{display:none}.theme-section.active{display:block}
+.theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.theme-swatch{padding:12px;border-radius:14px;border:2px solid var(--border);background:var(--bg-deep);cursor:pointer;transition:all .2s}
+.theme-swatch:hover,.theme-swatch.sel{border-color:var(--border-accent);transform:translateY(-2px);box-shadow:0 4px 16px var(--accent-glow)}
+.theme-swatch.sel{border-color:var(--accent)}
+.swatch-colors{display:flex;height:24px;border-radius:6px;overflow:hidden;margin-bottom:8px}
+.swatch-c{flex:1}
+.swatch-name{font-size:12px;color:var(--text-mid);text-align:center}
 
-/* ══════════════════════════════════════════
-   CARD
-══════════════════════════════════════════ */
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 18px; padding: 24px;
-  position: relative; overflow: hidden;
-  box-shadow: var(--shadow-card);
-  transition: background 0.45s, border-color 0.45s, box-shadow 0.45s;
-}
-.card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--grad-line), transparent);
-}
+/* ── TOAST ── */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg-raised);border:1px solid var(--border-accent);color:var(--text-bright);padding:11px 24px;border-radius:50px;font-family:'Annie Use Your Telescope',cursive;font-size:14px;z-index:300;white-space:nowrap;transition:transform .35s cubic-bezier(.34,1.56,.64,1),background .4s}
+.toast.show{transform:translateX(-50%) translateY(0)}
 
-/* Card titles — Cabin Sketch, bigger */
-.card-title {
-  font-family: 'Cabin Sketch', cursive;
-  font-size: 18px; font-weight: 700;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 22px;
-  display: flex; align-items: center; gap: 10px;
-  transition: color 0.45s;
-}
-.card-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+@keyframes ambientPulse{0%,100%{box-shadow:0 0 0 0 rgba(200,129,58,0)}50%{box-shadow:0 0 40px 4px rgba(200,129,58,.07)}}
+.timer-card.running{animation:ambientPulse 4s ease infinite}
 
-/* ══════════════════════════════════════════
-   POMODORO TIMER
-══════════════════════════════════════════ */
-.timer-card { grid-column: 2; display: flex; flex-direction: column; align-items: center; }
-
-.timer-modes {
-  display: flex; gap: 6px; margin-bottom: 30px;
-  background: var(--bg-deep); padding: 5px; border-radius: 50px;
-  border: 1px solid var(--border); transition: background 0.45s, border-color 0.45s;
-}
-.mode-btn {
-  padding: 7px 20px; border-radius: 40px; border: none;
-  background: transparent; color: var(--text-dim);
-  font-family: 'Annie Use Your Telescope', cursive;
-  font-size: 14px; cursor: pointer; transition: all 0.25s; white-space: nowrap;
-}
-.mode-btn.active {
-  background: var(--bg-raised); color: var(--accent);
-  border: 1px solid var(--border-accent);
-}
-
-.timer-ring-wrapper {
-  position: relative; width: 264px; height: 264px; margin: 0 auto 30px;
-}
-.timer-ring-svg { position: absolute; inset: 0; transform: rotate(-90deg); }
-.ring-bg   { fill: none; stroke: var(--ring-bg); stroke-width: 7; transition: stroke 0.45s; }
-.ring-progress {
-  fill: none; stroke: var(--accent); stroke-width: 7; stroke-linecap: round;
-  filter: drop-shadow(0 0 9px rgba(200,129,58,0.55));
-  transition: stroke-dashoffset 1s linear, stroke 0.5s;
-}
-[data-theme="light"] .ring-progress { filter: drop-shadow(0 0 8px rgba(192,133,82,0.5)); }
-.ring-progress.break-mode { stroke: var(--accent-green); filter: drop-shadow(0 0 9px rgba(61,122,86,0.55)); }
-
-.timer-center {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-
-/* Timer digits — Foldit */
-.timer-display {
-  font-family: 'Foldit', cursive;
-  font-size: 70px; font-weight: 300; line-height: 1; letter-spacing: 0.01em;
-  color: var(--text-bright); transition: color 0.45s;
-}
-.timer-label {
-  font-family: 'Annie Use Your Telescope', cursive;
-  font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--text-dim); margin-top: 8px; transition: color 0.45s;
-}
-.session-dots { display: flex; gap: 6px; margin-top: 10px; }
-.session-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-dim); transition: background 0.3s; }
-.session-dot.done { background: var(--accent); }
-
-.timer-controls { display: flex; gap: 12px; margin-bottom: 28px; }
-.btn-icon {
-  width: 46px; height: 46px; border-radius: 50%;
-  border: 1px solid var(--border); background: var(--bg-raised);
-  color: var(--text-mid); font-size: 18px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-}
-.btn-icon:hover { border-color: var(--border-accent); color: var(--accent); }
-
-.btn-main {
-  width: 66px; height: 66px; border-radius: 50%; border: none;
-  background: var(--accent); color: #fff; font-size: 22px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s; box-shadow: 0 0 28px var(--accent-glow);
-}
-.btn-main:hover { transform: scale(1.08); }
-
-.timer-settings { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; width: 100%; }
-.setting-box {
-  background: var(--bg-deep); border: 1px solid var(--border);
-  border-radius: 12px; padding: 13px; text-align: center;
-  transition: border-color 0.2s, background 0.45s;
-}
-.setting-box:hover { border-color: var(--border-accent); }
-.setting-label {
-  font-family: 'Annie Use Your Telescope', cursive;
-  font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--text-dim); margin-bottom: 6px; transition: color 0.45s;
-}
-.setting-value {
-  font-family: 'Foldit', cursive;
-  font-size: 26px; font-weight: 300; color: var(--text-bright); transition: color 0.45s;
-}
-.setting-controls { display: flex; justify-content: center; gap: 8px; margin-top: 7px; }
-.adj-btn {
-  width: 22px; height: 22px; border-radius: 5px;
-  border: 1px solid var(--border); background: transparent;
-  color: var(--text-mid); font-size: 14px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; transition: all 0.15s;
-}
-.adj-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-/* ══════════════════════════════════════════
-   TODO LIST
-══════════════════════════════════════════ */
-.todo-input-row { display: flex; gap: 8px; margin-bottom: 16px; }
-.todo-input {
-  flex: 1; background: var(--bg-deep); border: 1px solid var(--border);
-  border-radius: 11px; padding: 10px 14px;
-  color: var(--text-bright); font-family: 'Annie Use Your Telescope', cursive; font-size: 14px;
-  outline: none; transition: border-color 0.2s, background 0.45s, color 0.45s;
-}
-.todo-input:focus { border-color: var(--border-accent); }
-.todo-input::placeholder { color: var(--text-dim); }
-
-.add-btn {
-  width: 40px; height: 40px; flex-shrink: 0; border-radius: 11px;
-  border: 1px solid var(--border-accent); background: var(--accent-glow);
-  color: var(--accent); font-size: 22px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-}
-.add-btn:hover { background: var(--accent); color: #fff; }
-
-.todo-filters { display: flex; gap: 4px; margin-bottom: 14px; }
-.filter-btn {
-  padding: 4px 13px; border-radius: 20px; border: 1px solid transparent;
-  background: transparent; color: var(--text-dim);
-  font-family: 'Annie Use Your Telescope', cursive; font-size: 13px; cursor: pointer; transition: all 0.2s;
-}
-.filter-btn.active { border-color: var(--border-accent); color: var(--accent); background: var(--accent-glow); }
-
-.todo-list { display: flex; flex-direction: column; gap: 8px; max-height: 340px; overflow-y: auto; padding-right: 4px; }
-.todo-list::-webkit-scrollbar { width: 3px; }
-.todo-list::-webkit-scrollbar-thumb { background: var(--bg-raised); border-radius: 2px; }
-
-.todo-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 13px; background: var(--bg-deep);
-  border: 1px solid var(--border); border-radius: 11px;
-  transition: border-color 0.2s, background 0.45s;
-  animation: slideIn 0.25s ease;
-}
-@keyframes slideIn { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
-.todo-item:hover { border-color: var(--border-accent); }
-.todo-item.done { opacity: 0.45; }
-
-.todo-check {
-  width: 19px; height: 19px; border-radius: 6px;
-  border: 1.5px solid var(--text-dim); background: transparent;
-  cursor: pointer; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s; font-size: 11px;
-}
-.todo-check.checked { background: var(--accent-green); border-color: var(--accent-green); color: #fff; }
-
-.todo-text {
-  flex: 1; font-family: 'Annie Use Your Telescope', cursive;
-  font-size: 14px; color: var(--text-mid); line-height: 1.4; transition: color 0.45s;
-}
-.todo-item.done .todo-text { text-decoration: line-through; }
-
-.todo-del {
-  opacity: 0; background: transparent; border: none;
-  color: var(--accent-red); cursor: pointer; font-size: 14px; padding: 2px 4px; transition: opacity 0.2s;
-}
-.todo-item:hover .todo-del { opacity: 1; }
-
-.todo-stats {
-  margin-top: 14px; font-family: 'Annie Use Your Telescope', cursive;
-  font-size: 13px; color: var(--text-dim); display: flex; justify-content: space-between;
-}
-.clear-done {
-  background: none; border: none; color: var(--text-dim);
-  font-family: 'Annie Use Your Telescope', cursive; font-size: 13px; cursor: pointer; transition: color 0.2s;
-}
-.clear-done:hover { color: var(--accent-red); }
-
-.empty-state { text-align: center; padding: 30px 0; color: var(--text-dim); font-family: 'Annie Use Your Telescope', cursive; font-size: 14px; }
-.empty-state .empty-icon { font-size: 28px; margin-bottom: 8px; opacity: 0.4; }
-
-/* ══════════════════════════════════════════
-   QUOTES
-══════════════════════════════════════════ */
-/* Quote body — Felipa script */
-.quote-body {
-  font-family: 'Felipa', cursive;
-  font-size: 26px; line-height: 1.6;
-  color: var(--text-bright); margin-bottom: 16px; min-height: 96px;
-  transition: opacity 0.4s, color 0.45s;
-}
-.quote-author {
-  font-family: 'Annie Use Your Telescope', cursive;
-  font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--accent); transition: opacity 0.4s, color 0.45s;
-}
-.quote-nav { display: flex; justify-content: flex-end; gap: 6px; margin-top: 16px; }
-.q-btn {
-  width: 32px; height: 32px; border-radius: 9px;
-  border: 1px solid var(--border); background: transparent;
-  color: var(--text-dim); cursor: pointer; font-size: 14px;
-  display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-}
-.q-btn:hover { border-color: var(--border-accent); color: var(--accent); }
-
-/* ══════════════════════════════════════════
-   TOAST
-══════════════════════════════════════════ */
-.toast {
-  position: fixed; bottom: 28px; left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: var(--bg-raised); border: 1px solid var(--border-accent);
-  color: var(--text-bright); padding: 12px 28px; border-radius: 50px;
-  font-family: 'Annie Use Your Telescope', cursive; font-size: 14px;
-  letter-spacing: 0.05em; z-index: 100; white-space: nowrap;
-  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), background 0.45s, color 0.45s;
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
-
-@keyframes ambientPulse {
-  0%,100% { box-shadow: 0 0 0 0 rgba(200,129,58,0); }
-  50%      { box-shadow: 0 0 40px 4px rgba(200,129,58,0.07); }
-}
-.timer-card.running { animation: ambientPulse 4s ease infinite; }
-
-/* ══════════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════════ */
-@media (max-width: 1100px) { .app-grid { grid-template-columns: 1fr 1fr; } .timer-card { grid-column: 1 / -1; } }
-@media (max-width: 700px)  { .app-grid { grid-template-columns: 1fr; } .timer-card { grid-column: 1; } header { padding: 14px 18px; } }
-
+@media(max-width:1100px){.app-grid{grid-template-columns:1fr 1fr}.timer-card{grid-column:1/-1}}
+@media(max-width:700px){.app-grid{grid-template-columns:1fr}.timer-card{grid-column:1}header{padding:12px 16px}}
 </style>
 </head>
 <body>
 
+<!-- ═══════════ HEADER ═══════════ -->
 <header>
   <div class="logo">Sanctum<span>.</span></div>
-  <div class="header-right">
-    <span id="live-clock">--:-- --</span>
-    <span style="color:var(--border)">|</span>
-    <span id="date-display">--</span>
-    <button class="theme-toggle" onclick="toggleTheme()">
-      <div class="toggle-track"><div class="toggle-thumb"></div></div>
-      <span class="lbl-dark">Light</span>
-      <span class="lbl-light">Dark</span>
-    </button>
+  <div class="header-actions">
+    <div class="hdr-clock"><span id="live-clock">--:-- --</span> &nbsp;|&nbsp; <span id="date-display">--</span></div>
+    <button class="hdr-btn" onclick="openFocusMode()">⛶ Focus Mode</button>
+    <button class="hdr-btn" onclick="openReflection()">◎ Reflect</button>
+    <button class="hdr-btn" onclick="openThemePicker()">◈ Theme</button>
   </div>
 </header>
 
+<!-- ═══════════ MAIN GRID ═══════════ -->
 <div class="app-grid">
 
-  <!-- ────────── TODO ────────── -->
-  <div class="card" style="grid-column:1;">
+  <!-- ── LEFT: TASKS ── -->
+  <div class="card">
     <div class="card-title">⬡ Task List</div>
+    <div class="priority-row">
+      <span class="pri-lbl">Priority:</span>
+      <button class="pri-btn" data-p="high" onclick="setPriority('high',this)">High</button>
+      <button class="pri-btn" data-p="med" onclick="setPriority('med',this)">Med</button>
+      <button class="pri-btn" data-p="low" onclick="setPriority('low',this)">Low</button>
+    </div>
     <div class="todo-input-row">
       <input class="todo-input" id="todoInput" type="text" placeholder="Add a task…" maxlength="120" autocomplete="off">
       <button class="add-btn" onclick="addTodo()">+</button>
@@ -447,10 +264,7 @@ header {
       <button class="filter-btn" onclick="setFilter('done',this)">Done</button>
     </div>
     <div class="todo-list" id="todoList">
-      <div class="empty-state" id="todoEmpty">
-        <div class="empty-icon">✦</div>
-        No tasks yet. Add one above.
-      </div>
+      <div class="empty-state" id="todoEmpty"><div class="empty-icon">✦</div>No tasks yet. Add one above.</div>
     </div>
     <div class="todo-stats">
       <span id="todoStats">0 tasks</span>
@@ -458,9 +272,14 @@ header {
     </div>
   </div>
 
-  <!-- ────────── POMODORO ────────── -->
+  <!-- ── CENTER: TIMER ── -->
   <div class="card timer-card" id="timerCard">
-    <div class="card-title" style="width:100%;">⏱ Pomodoro Timer</div>
+    <div class="card-title" style="width:100%">⏱ Pomodoro Timer</div>
+
+    <div class="active-task-badge" id="activeTaskBadge">
+      <span id="activeTaskLabel"></span>
+      <button class="atb-clear" onclick="clearActiveTask()">✕</button>
+    </div>
 
     <div class="timer-modes">
       <button class="mode-btn active" onclick="setMode('work',this)">Focus</button>
@@ -469,21 +288,20 @@ header {
     </div>
 
     <div class="timer-ring-wrapper">
-      <svg class="timer-ring-svg" viewBox="0 0 264 264">
-        <circle class="ring-bg"       cx="132" cy="132" r="116"/>
-        <circle class="ring-progress" id="ringProgress" cx="132" cy="132" r="116"
-          stroke-dasharray="728.8" stroke-dashoffset="0"/>
+      <svg class="timer-ring-svg" viewBox="0 0 256 256">
+        <circle class="ring-bg" cx="128" cy="128" r="110"/>
+        <circle class="ring-progress" id="ringProgress" cx="128" cy="128" r="110" stroke-dasharray="691.2" stroke-dashoffset="0"/>
       </svg>
       <div class="timer-center">
         <div class="timer-display" id="timerDisplay">25:00</div>
-        <div class="timer-label"   id="timerLabel">Focus Session</div>
-        <div class="session-dots"  id="sessionDots"></div>
+        <div class="timer-label" id="timerLabel">Focus Session</div>
+        <div class="session-dots" id="sessionDots"></div>
       </div>
     </div>
 
     <div class="timer-controls">
       <button class="btn-icon" onclick="skipSession()" title="Skip">⏭</button>
-      <button class="btn-main" id="timerBtn" onclick="toggleTimer()">▶</button>
+      <button class="btn-main" id="timerBtn" onclick="startOrMood()">▶</button>
       <button class="btn-icon" onclick="resetTimer()" title="Reset">↺</button>
     </div>
 
@@ -492,77 +310,300 @@ header {
         <div class="setting-label">Focus</div>
         <div class="setting-value" id="setFocus">25</div>
         <div class="setting-controls">
-          <button class="adj-btn" onclick="adjustTime('focus',-1)">−</button>
-          <button class="adj-btn" onclick="adjustTime('focus',1)">+</button>
+          <button class="adj-btn" onclick="adj('focus',-1)">−</button>
+          <button class="adj-btn" onclick="adj('focus',1)">+</button>
         </div>
       </div>
       <div class="setting-box">
         <div class="setting-label">Short Break</div>
         <div class="setting-value" id="setShort">5</div>
         <div class="setting-controls">
-          <button class="adj-btn" onclick="adjustTime('short',-1)">−</button>
-          <button class="adj-btn" onclick="adjustTime('short',1)">+</button>
+          <button class="adj-btn" onclick="adj('short',-1)">−</button>
+          <button class="adj-btn" onclick="adj('short',1)">+</button>
         </div>
       </div>
       <div class="setting-box">
         <div class="setting-label">Long Break</div>
         <div class="setting-value" id="setLong">15</div>
         <div class="setting-controls">
-          <button class="adj-btn" onclick="adjustTime('long',-1)">−</button>
-          <button class="adj-btn" onclick="adjustTime('long',1)">+</button>
+          <button class="adj-btn" onclick="adj('long',-1)">−</button>
+          <button class="adj-btn" onclick="adj('long',1)">+</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ────────── QUOTES ────────── -->
-  <div style="grid-column:3;">
+  <!-- ── RIGHT: TABS ── -->
+  <div>
     <div class="card">
-      <div class="card-title">✦ Wisdom</div>
-      <div class="quote-body"   id="quoteText">"Loading…"</div>
-      <div class="quote-author" id="quoteAuthor">—</div>
-      <div class="quote-nav">
-        <button class="q-btn" onclick="prevQuote()">←</button>
-        <button class="q-btn" onclick="nextQuote()">→</button>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="showTab('wisdom',this)">✦ Wisdom</button>
+        <button class="tab-btn" onclick="showTab('stats',this)">◈ Stats</button>
+      </div>
+
+      <!-- WISDOM TAB -->
+      <div class="tab-panel active" id="tab-wisdom">
+        <div class="quote-body" id="quoteText">"Loading…"</div>
+        <div class="quote-author" id="quoteAuthor">—</div>
+        <div class="quote-nav">
+          <button class="q-btn" onclick="prevQuote()">←</button>
+          <button class="q-btn" onclick="nextQuote()">→</button>
+        </div>
+      </div>
+
+      <!-- STATS TAB -->
+      <div class="tab-panel" id="tab-stats">
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-number" id="statMinutes">0</div>
+            <div class="stat-label">Minutes Today</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-number" id="statSessions">0</div>
+            <div class="stat-label">Sessions Today</div>
+          </div>
+          <div class="streak-box">
+            <div class="streak-fire">🔥</div>
+            <div class="streak-count" id="statStreak">0</div>
+            <div class="streak-text">Day Streak</div>
+          </div>
+        </div>
+
+        <div class="heatmap-label">Last 28 days</div>
+        <div class="heatmap" id="heatmap"></div>
+
+        <div class="heatmap-label" style="margin-top:4px">Recent Sessions</div>
+        <div class="session-history" id="sessionHistory"></div>
       </div>
     </div>
   </div>
+</div>
 
+<!-- ═══════════ FULL SCREEN FOCUS OVERLAY ═══════════ -->
+<div class="focus-overlay" id="focusOverlay">
+  <div class="focus-pulse"></div>
+  <button class="focus-exit" onclick="closeFocusMode()">✕ Exit Focus</button>
+  <div class="focus-task-text" id="focusTaskText"></div>
+  <div class="focus-timer" id="focusTimer">25:00</div>
+  <div class="focus-label" id="focusLabel">Focus Session</div>
+  <div class="focus-controls">
+    <button class="btn-icon" onclick="skipSession()" title="Skip">⏭</button>
+    <button class="btn-main" id="focusBtn" onclick="startOrMood()">▶</button>
+    <button class="btn-icon" onclick="resetTimer()" title="Reset">↺</button>
+  </div>
+  <div class="focus-quote" id="focusQuote"></div>
+</div>
+
+<!-- ═══════════ MOOD CHECK-IN MODAL ═══════════ -->
+<div class="modal-backdrop" id="moodModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeMoodModal(true)">✕</button>
+    <div class="modal-title">Before you begin</div>
+    <div class="modal-sub">A quick check-in sets the tone for your session.</div>
+
+    <div class="m-section">
+      <div class="m-section-label">How are you feeling?</div>
+      <div class="emoji-scale" id="moodScale">
+        <button class="emo-btn" onclick="selectMood(1,this)">😴</button>
+        <button class="emo-btn" onclick="selectMood(2,this)">😕</button>
+        <button class="emo-btn" onclick="selectMood(3,this)">😐</button>
+        <button class="emo-btn" onclick="selectMood(4,this)">🙂</button>
+        <button class="emo-btn" onclick="selectMood(5,this)">⚡</button>
+      </div>
+    </div>
+
+    <div class="m-section">
+      <div class="m-section-label">Energy level</div>
+      <div class="energy-scale" id="energyScale">
+        <div class="nrg-bar" style="height:10px" onclick="selectEnergy(1,this)"></div>
+        <div class="nrg-bar" style="height:17px" onclick="selectEnergy(2,this)"></div>
+        <div class="nrg-bar" style="height:24px" onclick="selectEnergy(3,this)"></div>
+        <div class="nrg-bar" style="height:30px" onclick="selectEnergy(4,this)"></div>
+        <div class="nrg-bar" style="height:36px" onclick="selectEnergy(5,this)"></div>
+      </div>
+    </div>
+
+    <div class="m-section">
+      <div class="m-section-label">What will you focus on?</div>
+      <select class="task-select" id="taskSelect"></select>
+    </div>
+
+    <button class="btn-primary" onclick="startSession()">Start Focusing →</button>
+    <button class="btn-secondary" onclick="closeMoodModal(true)">Skip check-in</button>
+  </div>
+</div>
+
+<!-- ═══════════ REFLECTION MODAL ═══════════ -->
+<div class="modal-backdrop" id="reflectionModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeReflection()">✕</button>
+    <div class="modal-title">End of Day Reflection</div>
+    <div class="modal-sub">Take a moment to close the loop on today.</div>
+
+    <div class="modal-stats-row">
+      <div class="modal-stat">
+        <div class="modal-stat-n" id="refMinutes">0</div>
+        <div class="modal-stat-l">Focus Min</div>
+      </div>
+      <div class="modal-stat">
+        <div class="modal-stat-n" id="refSessions">0</div>
+        <div class="modal-stat-l">Sessions</div>
+      </div>
+      <div class="modal-stat">
+        <div class="modal-stat-n" id="refStreak">0</div>
+        <div class="modal-stat-l">Day Streak</div>
+      </div>
+    </div>
+
+    <div class="m-section">
+      <div class="m-section-label">What did you accomplish today?</div>
+      <textarea class="modal-textarea" id="refAccomplished" rows="3" placeholder="I finished…"></textarea>
+    </div>
+    <div class="m-section">
+      <div class="m-section-label">What carries over to tomorrow?</div>
+      <textarea class="modal-textarea" id="refCarryover" rows="2" placeholder="Still need to…"></textarea>
+    </div>
+    <div class="m-section">
+      <div class="m-section-label">Overall focus quality today</div>
+      <div class="star-row" id="starRow">
+        <button class="star-btn" onclick="rateFocus(1)">★</button>
+        <button class="star-btn" onclick="rateFocus(2)">★</button>
+        <button class="star-btn" onclick="rateFocus(3)">★</button>
+        <button class="star-btn" onclick="rateFocus(4)">★</button>
+        <button class="star-btn" onclick="rateFocus(5)">★</button>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="saveReflection()">Save Reflection ✓</button>
+  </div>
+</div>
+
+<!-- ═══════════ THEME PICKER MODAL ═══════════ -->
+<div class="modal-backdrop" id="themeModal">
+  <div class="modal theme-modal">
+    <button class="modal-close" onclick="closeThemePicker()">✕</button>
+    <div class="modal-title">Choose Your Theme</div>
+    <div class="modal-sub">Your preference is saved automatically.</div>
+
+    <div class="theme-tabs">
+      <button class="theme-tab active" onclick="showThemeTab('dark',this)">🌙 Dark</button>
+      <button class="theme-tab" onclick="showThemeTab('light',this)">☀️ Light</button>
+    </div>
+
+    <div class="theme-section active" id="tsec-dark">
+      <div class="theme-grid" id="darkThemeGrid"></div>
+    </div>
+    <div class="theme-section" id="tsec-light">
+      <div class="theme-grid" id="lightThemeGrid"></div>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-/* ══════════════════════════════════
-   THEME
-══════════════════════════════════ */
-function toggleTheme(){
-  const next = document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('sanctum-theme', next);
-}
-(function(){ const s=localStorage.getItem('sanctum-theme'); if(s) document.documentElement.setAttribute('data-theme',s); })();
+/* ═══════════════════════════════════════
+   THEME SYSTEM
+═══════════════════════════════════════ */
+const THEMES = {
+  'd-default':{ label:'Amber Noir', dark:true, swatches:['#07070f','#c8813a','#9d96a8','#ede8df'], vars:{'--bg-void':'#07070f','--bg-deep':'#0b0b16','--bg-card':'#10101e','--bg-raised':'#161628','--accent':'#c8813a','--accent-glow':'rgba(200,129,58,0.15)','--text-bright':'#ede8df','--text-mid':'#9d96a8','--text-dim':'#4e4a5a','--border':'rgba(255,255,255,0.06)','--border-accent':'rgba(200,129,58,0.28)','--ring-bg':'#161628','--radial-1':'rgba(200,129,58,0.08)','--radial-2':'rgba(78,158,120,0.05)','--grad-line':'rgba(200,129,58,0.32)','--shadow-card':'0 4px 32px rgba(0,0,0,0.5)','--noise-op':'0.025'}},
+  'd1':{ label:'Forest Night', dark:true, swatches:['#1B211A','#628141','#8BAE66','#EBD5AB'], vars:{'--bg-void':'#1B211A','--bg-deep':'#1e2920','--bg-card':'#222d22','--bg-raised':'#2d3e2a','--accent':'#8BAE66','--accent-glow':'rgba(139,174,102,0.18)','--text-bright':'#EBD5AB','--text-mid':'#B4C990','--text-dim':'#628141','--border':'rgba(235,213,171,0.07)','--border-accent':'rgba(139,174,102,0.3)','--ring-bg':'#2d3e2a','--radial-1':'rgba(139,174,102,0.1)','--radial-2':'rgba(98,129,65,0.06)','--grad-line':'rgba(139,174,102,0.35)','--shadow-card':'0 4px 32px rgba(0,0,0,0.5)','--noise-op':'0.025'}},
+  'd2':{ label:'Deep Ocean', dark:true, swatches:['#1A0540','#320A6B','#0F828C','#78B9B5'], vars:{'--bg-void':'#1A0540','--bg-deep':'#220860','--bg-card':'#280D6E','--bg-raised':'#320A6B','--accent':'#0F828C','--accent-glow':'rgba(15,130,140,0.2)','--text-bright':'#78B9B5','--text-mid':'#38A3A5','--text-dim':'#065084','--border':'rgba(120,185,181,0.08)','--border-accent':'rgba(15,130,140,0.32)','--ring-bg':'#320A6B','--radial-1':'rgba(15,130,140,0.12)','--radial-2':'rgba(6,80,132,0.06)','--grad-line':'rgba(15,130,140,0.38)','--shadow-card':'0 4px 32px rgba(0,0,0,0.6)','--noise-op':'0.020'}},
+  'd3':{ label:'Graphite', dark:true, swatches:['#181C14','#3C3D37','#697565','#ECDFCC'], vars:{'--bg-void':'#181C14','--bg-deep':'#1e231a','--bg-card':'#242920','--bg-raised':'#3C3D37','--accent':'#8A9885','--accent-glow':'rgba(105,117,101,0.18)','--text-bright':'#ECDFCC','--text-mid':'#B5A88A','--text-dim':'#697565','--border':'rgba(236,223,204,0.07)','--border-accent':'rgba(105,117,101,0.3)','--ring-bg':'#3C3D37','--radial-1':'rgba(105,117,101,0.1)','--radial-2':'rgba(60,61,55,0.08)','--grad-line':'rgba(105,117,101,0.35)','--shadow-card':'0 4px 32px rgba(0,0,0,0.5)','--noise-op':'0.030'}},
+  'd4':{ label:'Slate Rose', dark:true, swatches:['#2D4356','#435B66','#A76F6F','#EAB2A0'], vars:{'--bg-void':'#2D4356','--bg-deep':'#334d62','--bg-card':'#3a556e','--bg-raised':'#435B66','--accent':'#A76F6F','--accent-glow':'rgba(167,111,111,0.18)','--text-bright':'#EAB2A0','--text-mid':'#C99090','--text-dim':'#7A5555','--border':'rgba(234,178,160,0.08)','--border-accent':'rgba(167,111,111,0.3)','--ring-bg':'#435B66','--radial-1':'rgba(167,111,111,0.1)','--radial-2':'rgba(67,91,102,0.06)','--grad-line':'rgba(167,111,111,0.38)','--shadow-card':'0 4px 32px rgba(0,0,0,0.4)','--noise-op':'0.022'}},
+  'd5':{ label:'Midnight', dark:true, swatches:['#18122B','#393053','#443C68','#635985'], vars:{'--bg-void':'#18122B','--bg-deep':'#1e1636','--bg-card':'#251a40','--bg-raised':'#393053','--accent':'#635985','--accent-glow':'rgba(99,89,133,0.2)','--text-bright':'#C8B8E8','--text-mid':'#9080B8','--text-dim':'#443C68','--border':'rgba(200,184,232,0.07)','--border-accent':'rgba(99,89,133,0.32)','--ring-bg':'#393053','--radial-1':'rgba(99,89,133,0.12)','--radial-2':'rgba(57,48,83,0.06)','--grad-line':'rgba(99,89,133,0.38)','--shadow-card':'0 4px 32px rgba(0,0,0,0.6)','--noise-op':'0.022'}},
+  'd6':{ label:'Twilight', dark:true, swatches:['#28264A','#3F3B6C','#9F73AB','#A3C7D6'], vars:{'--bg-void':'#28264A','--bg-deep':'#302d58','--bg-card':'#3a376a','--bg-raised':'#3F3B6C','--accent':'#9F73AB','--accent-glow':'rgba(159,115,171,0.18)','--text-bright':'#A3C7D6','--text-mid':'#8098A8','--text-dim':'#624F82','--border':'rgba(163,199,214,0.08)','--border-accent':'rgba(159,115,171,0.3)','--ring-bg':'#3F3B6C','--radial-1':'rgba(159,115,171,0.12)','--radial-2':'rgba(98,79,130,0.06)','--grad-line':'rgba(159,115,171,0.38)','--shadow-card':'0 4px 32px rgba(0,0,0,0.5)','--noise-op':'0.022'}},
+  'l-default':{ label:'Warm Terracotta', dark:false, swatches:['#FFF8F0','#C08552','#8C5A3C','#4B2E2B'], vars:{'--bg-void':'#FFF8F0','--bg-deep':'#F5EAD8','--bg-card':'#FFFCF8','--bg-raised':'#EDD9C0','--accent':'#C08552','--accent-glow':'rgba(192,133,82,0.14)','--text-bright':'#4B2E2B','--text-mid':'#8C5A3C','--text-dim':'#C09070','--border':'rgba(75,46,43,0.1)','--border-accent':'rgba(192,133,82,0.38)','--ring-bg':'#E8D4BC','--radial-1':'rgba(192,133,82,0.10)','--radial-2':'rgba(140,90,60,0.06)','--grad-line':'rgba(192,133,82,0.40)','--shadow-card':'0 4px 24px rgba(75,46,43,0.08)','--noise-op':'0.010'}},
+  'l1':{ label:'Olive Grove', dark:false, swatches:['#F8F3E1','#E3DBBB','#AEB784','#41431B'], vars:{'--bg-void':'#F8F3E1','--bg-deep':'#EDE5CC','--bg-card':'#FDFAF2','--bg-raised':'#E3DBBB','--accent':'#718A4A','--accent-glow':'rgba(113,138,74,0.18)','--text-bright':'#41431B','--text-mid':'#727548','--text-dim':'#A8AD78','--border':'rgba(65,67,27,0.1)','--border-accent':'rgba(113,138,74,0.35)','--ring-bg':'#D8D0A8','--radial-1':'rgba(113,138,74,0.1)','--radial-2':'rgba(65,67,27,0.05)','--grad-line':'rgba(113,138,74,0.40)','--shadow-card':'0 4px 24px rgba(65,67,27,0.08)','--noise-op':'0.010'}},
+  'l2':{ label:'Ocean Breeze', dark:false, swatches:['#F0FFF8','#C0EDDF','#38A3A5','#22577A'], vars:{'--bg-void':'#F0FFF8','--bg-deep':'#D8F5EC','--bg-card':'#F8FFFC','--bg-raised':'#C0EDDF','--accent':'#38A3A5','--accent-glow':'rgba(56,163,165,0.15)','--text-bright':'#22577A','--text-mid':'#2E8A8C','--text-dim':'#70C8B0','--border':'rgba(34,87,122,0.1)','--border-accent':'rgba(56,163,165,0.38)','--ring-bg':'#B0E5D5','--radial-1':'rgba(56,163,165,0.1)','--radial-2':'rgba(34,87,122,0.06)','--grad-line':'rgba(56,163,165,0.42)','--shadow-card':'0 4px 24px rgba(34,87,122,0.08)','--noise-op':'0.010'}},
+  'l3':{ label:'Lavender Dream', dark:false, swatches:['#FFFCC1','#FDEAAB','#CBA1D2','#AB72C0'], vars:{'--bg-void':'#FFFCC1','--bg-deep':'#F5ECA0','--bg-card':'#FEFEF0','--bg-raised':'#FDEAAB','--accent':'#AB72C0','--accent-glow':'rgba(171,114,192,0.15)','--text-bright':'#4A1E6E','--text-mid':'#7A4898','--text-dim':'#CBA1D2','--border':'rgba(74,30,110,0.1)','--border-accent':'rgba(171,114,192,0.38)','--ring-bg':'#EDD898','--radial-1':'rgba(171,114,192,0.12)','--radial-2':'rgba(203,161,210,0.08)','--grad-line':'rgba(171,114,192,0.42)','--shadow-card':'0 4px 24px rgba(74,30,110,0.08)','--noise-op':'0.010'}},
+  'l4':{ label:'Rose Petal', dark:false, swatches:['#FFF5F0','#FFDFD3','#D291BC','#957DAD'], vars:{'--bg-void':'#FFF5F0','--bg-deep':'#FFDFD3','--bg-card':'#FFFAF8','--bg-raised':'#FEC8D8','--accent':'#957DAD','--accent-glow':'rgba(149,125,173,0.15)','--text-bright':'#3A1A50','--text-mid':'#6A3880','--text-dim':'#D291BC','--border':'rgba(58,26,80,0.1)','--border-accent':'rgba(149,125,173,0.38)','--ring-bg':'#F0B0C8','--radial-1':'rgba(149,125,173,0.12)','--radial-2':'rgba(210,145,188,0.08)','--grad-line':'rgba(149,125,173,0.42)','--shadow-card':'0 4px 24px rgba(58,26,80,0.08)','--noise-op':'0.010'}},
+  'l5':{ label:'Ember', dark:false, swatches:['#FFF8E0','#F6CE71','#FF6500','#C40C0C'], vars:{'--bg-void':'#FFF8E0','--bg-deep':'#F8E898','--bg-card':'#FFFDF0','--bg-raised':'#F5C040','--accent':'#FF6500','--accent-glow':'rgba(255,101,0,0.15)','--text-bright':'#C40C0C','--text-mid':'#CC561E','--text-dim':'#D4A020','--border':'rgba(196,12,12,0.12)','--border-accent':'rgba(255,101,0,0.38)','--ring-bg':'#EDB840','--radial-1':'rgba(255,101,0,0.10)','--radial-2':'rgba(196,12,12,0.06)','--grad-line':'rgba(255,101,0,0.42)','--shadow-card':'0 4px 24px rgba(196,12,12,0.08)','--noise-op':'0.010'}},
+  'l6':{ label:'Peach Blush', dark:false, swatches:['#FFF5EE','#FFCDB2','#E5989B','#B5828C'], vars:{'--bg-void':'#FFF5EE','--bg-deep':'#FFCDB2','--bg-card':'#FFFAF8','--bg-raised':'#FFB4A2','--accent':'#B5828C','--accent-glow':'rgba(181,130,140,0.15)','--text-bright':'#3D1520','--text-mid':'#7A3840','--text-dim':'#E5989B','--border':'rgba(61,21,32,0.10)','--border-accent':'rgba(181,130,140,0.38)','--ring-bg':'#F0A090','--radial-1':'rgba(181,130,140,0.12)','--radial-2':'rgba(229,152,155,0.08)','--grad-line':'rgba(181,130,140,0.42)','--shadow-card':'0 4px 24px rgba(61,21,32,0.08)','--noise-op':'0.010'}},
+};
 
-/* ══════════════════════════════════
+let currentThemeId = 'd-default';
+
+function applyTheme(id) {
+  const t = THEMES[id]; if (!t) return;
+  currentThemeId = id;
+  const root = document.documentElement;
+  Object.entries(t.vars).forEach(([k,v]) => root.style.setProperty(k,v));
+  localStorage.setItem('sanctum-theme', id);
+  renderThemeGrids();
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('sanctum-theme');
+  applyTheme(saved && THEMES[saved] ? saved : 'd-default');
+}
+
+/* ── Theme Picker UI ── */
+function renderThemeGrids() {
+  ['darkThemeGrid','lightThemeGrid'].forEach(gId => {
+    const isDark = gId.startsWith('dark');
+    const grid = document.getElementById(gId);
+    grid.innerHTML = '';
+    Object.entries(THEMES).filter(([,t])=> t.dark===isDark).forEach(([id,t]) => {
+      const el = document.createElement('div');
+      el.className = 'theme-swatch' + (id===currentThemeId?' sel':'');
+      el.onclick = () => { applyTheme(id); renderThemeGrids(); };
+      el.innerHTML = `<div class="swatch-colors">${t.swatches.map(c=>`<div class="swatch-c" style="background:${c}"></div>`).join('')}</div><div class="swatch-name">${t.label}</div>`;
+      grid.appendChild(el);
+    });
+  });
+}
+
+function showThemeTab(which, btn) {
+  document.querySelectorAll('.theme-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.theme-section').forEach(s=>s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tsec-'+which).classList.add('active');
+}
+function openThemePicker(){ renderThemeGrids(); document.getElementById('themeModal').classList.add('show'); }
+function closeThemePicker(){ document.getElementById('themeModal').classList.remove('show'); }
+
+/* ═══════════════════════════════════════
    CLOCK
-══════════════════════════════════ */
+═══════════════════════════════════════ */
 function updateClock(){
   const n=new Date();
-  document.getElementById('live-clock').textContent =
-    n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
-  document.getElementById('date-display').textContent =
-    n.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  document.getElementById('live-clock').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});
+  document.getElementById('date-display').textContent=n.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
 }
 updateClock(); setInterval(updateClock, 1000);
 
-/* ══════════════════════════════════
-   POMODORO
-══════════════════════════════════ */
+/* ═══════════════════════════════════════
+   TABS
+═══════════════════════════════════════ */
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  if(id==='stats') renderStats();
+}
+
+/* ═══════════════════════════════════════
+   STORAGE HELPERS
+═══════════════════════════════════════ */
+function getSessions(){ try{ return JSON.parse(localStorage.getItem('sanctum-sessions')||'[]'); }catch(e){ return []; }}
+function saveSessions(arr){ localStorage.setItem('sanctum-sessions', JSON.stringify(arr)); }
+function getStreak(){ try{ return JSON.parse(localStorage.getItem('sanctum-streak')||'{"lastDate":null,"count":0}'); }catch(e){ return {lastDate:null,count:0}; }}
+function saveStreak(s){ localStorage.setItem('sanctum-streak', JSON.stringify(s)); }
+function getReflections(){ try{ return JSON.parse(localStorage.getItem('sanctum-reflections')||'[]'); }catch(e){ return []; }}
+function today(){ return new Date().toISOString().slice(0,10); }
+
+/* ═══════════════════════════════════════
+   POMODORO TIMER
+═══════════════════════════════════════ */
 const cfg = {focus:25, short:5, long:15};
 let cMode='work', tLeft=cfg.focus*60, tTotal=cfg.focus*60;
 let running=false, tInterval=null, sessions=0;
-const CIRC = 2*Math.PI*116; // r=116 → 728.8
+const CIRC = 2*Math.PI*110; // r=110 → 691.2
 const modeLabels = {work:'Focus Session', short:'Short Break', long:'Long Break'};
+let activeFocusTask = null; // {id, text}
+let pendingMood = null, pendingEnergy = null;
+let focusModeOpen = false;
 
 function setMode(m, btn){
   document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
@@ -570,16 +611,25 @@ function setMode(m, btn){
   tTotal=(m==='work'?cfg.focus:m==='short'?cfg.short:cfg.long)*60;
   tLeft=tTotal; running=false; clearInterval(tInterval);
   document.getElementById('timerBtn').textContent='▶';
+  if(focusModeOpen) document.getElementById('focusBtn').textContent='▶';
   document.getElementById('timerCard').classList.remove('running');
-  document.getElementById('ringProgress').classList.toggle('break-mode', m!=='work');
+  document.getElementById('ringProgress').classList.toggle('brk', m!=='work');
   updateDisplay();
 }
 
-function toggleTimer(){ running ? pause() : start(); }
+function startOrMood(){
+  if(running){ pause(); return; }
+  if(cMode==='work' && !running){
+    openMoodModal();
+  } else {
+    startTimer();
+  }
+}
 
-function start(){
+function startTimer(){
   running=true;
   document.getElementById('timerBtn').textContent='⏸';
+  if(focusModeOpen) document.getElementById('focusBtn').textContent='⏸';
   document.getElementById('timerCard').classList.add('running');
   tInterval=setInterval(()=>{ tLeft<=0 ? sessionDone() : (tLeft--, updateDisplay()); }, 1000);
 }
@@ -587,6 +637,7 @@ function start(){
 function pause(){
   running=false; clearInterval(tInterval);
   document.getElementById('timerBtn').textContent='▶';
+  if(focusModeOpen) document.getElementById('focusBtn').textContent='▶';
   document.getElementById('timerCard').classList.remove('running');
 }
 
@@ -597,106 +648,300 @@ function sessionDone(){
   clearInterval(tInterval); running=false;
   document.getElementById('timerCard').classList.remove('running');
   if(cMode==='work'){
-    sessions++; buildDots();
+    sessions++;
+    buildDots();
+    // Log session
+    const recs = getSessions();
+    recs.push({ id:Date.now(), date:today(), time:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true}), duration:cfg.focus, mode:'work', mood:pendingMood, energy:pendingEnergy, taskId:activeFocusTask?.id||null, taskText:activeFocusTask?.text||null });
+    saveSessions(recs);
+    updateStreak();
     showToast('Focus session complete! Take a break 🎯');
     setTimeout(()=>autoSwitch(sessions%4===0?'long':'short'), 1200);
   } else {
     showToast('Break over — back to work! ⚡');
     setTimeout(()=>autoSwitch('work'), 1200);
   }
+  pendingMood=null; pendingEnergy=null;
 }
 
 function autoSwitch(m){
-  document.querySelectorAll('.mode-btn').forEach((b,i)=>
-    b.classList.toggle('active', ['work','short','long'][i]===m));
-  cMode=m;
-  tTotal=(m==='work'?cfg.focus:m==='short'?cfg.short:cfg.long)*60;
-  tLeft=tTotal;
-  document.getElementById('ringProgress').classList.toggle('break-mode', m!=='work');
+  document.querySelectorAll('.mode-btn').forEach((b,i)=>b.classList.toggle('active',['work','short','long'][i]===m));
+  cMode=m; tTotal=(m==='work'?cfg.focus:m==='short'?cfg.short:cfg.long)*60; tLeft=tTotal;
+  document.getElementById('ringProgress').classList.toggle('brk',m!=='work');
   document.getElementById('timerBtn').textContent='▶';
+  if(focusModeOpen) document.getElementById('focusBtn').textContent='▶';
   updateDisplay();
 }
 
 function updateDisplay(){
-  const m=String(Math.floor(tLeft/60)).padStart(2,'0');
-  const s=String(tLeft%60).padStart(2,'0');
-  document.getElementById('timerDisplay').textContent=`${m}:${s}`;
+  const m=String(Math.floor(tLeft/60)).padStart(2,'0'), s=String(tLeft%60).padStart(2,'0');
+  const txt=`${m}:${s}`;
+  document.getElementById('timerDisplay').textContent=txt;
   document.getElementById('timerLabel').textContent=modeLabels[cMode];
+  if(focusModeOpen){ document.getElementById('focusTimer').textContent=txt; document.getElementById('focusLabel').textContent=modeLabels[cMode]; }
   document.getElementById('ringProgress').style.strokeDashoffset=CIRC*(1-tLeft/tTotal);
-  document.title=running ? `${m}:${s} — Sanctum` : 'SANCTUM';
+  document.title=running?`${txt} — Sanctum`:'SANCTUM';
 }
 
-function adjustTime(type, delta){
+function adj(type, delta){
   cfg[type]=Math.max(1, Math.min(90, cfg[type]+delta));
   document.getElementById('set'+type.charAt(0).toUpperCase()+type.slice(1)).textContent=cfg[type];
-  const map={focus:'work', short:'short', long:'long'};
+  const map={focus:'work',short:'short',long:'long'};
   if(map[type]===cMode && !running){ tTotal=cfg[type]*60; tLeft=tTotal; updateDisplay(); }
 }
 
 function buildDots(){
   const c=document.getElementById('sessionDots'); c.innerHTML='';
   const f=sessions%4===0&&sessions>0?4:sessions%4;
-  for(let i=0;i<4;i++){
-    const d=document.createElement('div');
-    d.className='session-dot'+(i<f?' done':'');
-    c.appendChild(d);
-  }
+  for(let i=0;i<4;i++){ const d=document.createElement('div'); d.className='session-dot'+(i<f?' done':''); c.appendChild(d); }
+}
+
+function updateStreak(){
+  const streak=getStreak(), d=today();
+  const yesterday=new Date(new Date().setDate(new Date().getDate()-1)).toISOString().slice(0,10);
+  if(streak.lastDate===d){ /* already updated today */ }
+  else if(streak.lastDate===yesterday){ streak.count++; streak.lastDate=d; }
+  else { streak.count=1; streak.lastDate=d; }
+  saveStreak(streak);
+}
+
+/* Active task */
+function setActiveTask(id, text){
+  activeFocusTask={id, text};
+  const badge=document.getElementById('activeTaskBadge');
+  document.getElementById('activeTaskLabel').textContent='Focusing on: '+text;
+  badge.classList.add('shown');
+  document.getElementById('focusTaskText').textContent=text;
+  // Highlight task in list
+  document.querySelectorAll('.todo-item').forEach(el=>{
+    el.classList.toggle('focused', el.dataset.id===String(id));
+    el.querySelector('.todo-focus-btn').textContent = el.dataset.id===String(id) ? '◉' : '◎';
+  });
+}
+
+function clearActiveTask(){
+  activeFocusTask=null;
+  document.getElementById('activeTaskBadge').classList.remove('shown');
+  document.getElementById('focusTaskText').textContent='';
+  document.querySelectorAll('.todo-item').forEach(el=>{
+    el.classList.remove('focused');
+    el.querySelector('.todo-focus-btn').textContent='◎';
+  });
 }
 
 updateDisplay(); buildDots();
 
-/* ══════════════════════════════════
-   TODO
-══════════════════════════════════ */
-let todos=[], fil='all';
+/* ═══════════════════════════════════════
+   FOCUS MODE
+═══════════════════════════════════════ */
+function openFocusMode(){
+  focusModeOpen=true;
+  document.getElementById('focusOverlay').classList.add('show');
+  document.getElementById('focusTimer').textContent=document.getElementById('timerDisplay').textContent;
+  document.getElementById('focusBtn').textContent=running?'⏸':'▶';
+  const q=quotes[qIdx]; document.getElementById('focusQuote').textContent=`"${q.text}"`;
+  document.addEventListener('keydown',focusKeyHandler);
+}
 
-document.getElementById('todoInput').addEventListener('keydown', e=>{ if(e.key==='Enter') addTodo(); });
+function closeFocusMode(){
+  focusModeOpen=false;
+  document.getElementById('focusOverlay').classList.remove('show');
+  document.removeEventListener('keydown',focusKeyHandler);
+}
+
+function focusKeyHandler(e){ if(e.key==='Escape') closeFocusMode(); }
+
+/* ═══════════════════════════════════════
+   MOOD CHECK-IN
+═══════════════════════════════════════ */
+let selectedMood=0, selectedEnergy=0;
+
+function openMoodModal(){
+  selectedMood=0; selectedEnergy=0;
+  document.querySelectorAll('.emo-btn').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.nrg-bar').forEach(b=>b.classList.remove('sel'));
+  // Populate task dropdown
+  const sel=document.getElementById('taskSelect');
+  sel.innerHTML='<option value="">— No specific task —</option>';
+  todos.filter(t=>!t.done).forEach(t=>{
+    const o=document.createElement('option');
+    o.value=t.id; o.textContent=(t.text.length>48?t.text.slice(0,48)+'…':t.text);
+    if(activeFocusTask?.id===t.id) o.selected=true;
+    sel.appendChild(o);
+  });
+  document.getElementById('moodModal').classList.add('show');
+}
+
+function closeMoodModal(andStart){
+  document.getElementById('moodModal').classList.remove('show');
+  if(andStart) startTimer();
+}
+
+function selectMood(v, btn){ selectedMood=v; document.querySelectorAll('.emo-btn').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); }
+function selectEnergy(v, btn){
+  selectedEnergy=v;
+  document.querySelectorAll('.nrg-bar').forEach((b,i)=>b.classList.toggle('sel',i<v));
+}
+
+function startSession(){
+  pendingMood=selectedMood||null; pendingEnergy=selectedEnergy||null;
+  const sel=document.getElementById('taskSelect');
+  if(sel.value){
+    const t=todos.find(t=>String(t.id)===sel.value);
+    if(t) setActiveTask(t.id, t.text);
+  }
+  closeMoodModal(false);
+  startTimer();
+}
+
+/* ═══════════════════════════════════════
+   TODO LIST
+═══════════════════════════════════════ */
+let todos=[], fil='all', newPriority='none';
+
+try{ todos=JSON.parse(localStorage.getItem('sanctum-todos')||'[]'); }catch(e){ todos=[]; }
+
+function saveTodos(){ localStorage.setItem('sanctum-todos', JSON.stringify(todos)); }
+
+function setPriority(p, btn){
+  newPriority = btn.classList.contains('sel') ? 'none' : p;
+  document.querySelectorAll('.pri-btn').forEach(b=>b.classList.remove('sel'));
+  if(newPriority!=='none') btn.classList.add('sel');
+}
+
+document.getElementById('todoInput').addEventListener('keydown',e=>{ if(e.key==='Enter') addTodo(); });
 
 function addTodo(){
   const inp=document.getElementById('todoInput'), txt=inp.value.trim();
   if(!txt) return;
-  todos.unshift({id:Date.now(), text:txt, done:false});
-  inp.value=''; renderTodos();
+  todos.unshift({id:Date.now(), text:txt, done:false, priority:newPriority});
+  inp.value=''; newPriority='none';
+  document.querySelectorAll('.pri-btn').forEach(b=>b.classList.remove('sel'));
+  saveTodos(); renderTodos();
 }
 
-function setFilter(f, btn){
-  fil=f;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active'); renderTodos();
-}
+function setFilter(f, btn){ fil=f; document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderTodos(); }
+function toggleDone(id){ const t=todos.find(t=>t.id===id); if(t){ t.done=!t.done; if(t.done&&activeFocusTask?.id===id) clearActiveTask(); saveTodos(); renderTodos(); }}
+function deleteTodo(id){ todos=todos.filter(t=>t.id!==id); if(activeFocusTask?.id===id) clearActiveTask(); saveTodos(); renderTodos(); }
+function clearDone(){ todos=todos.filter(t=>!t.done); saveTodos(); renderTodos(); }
 
-function toggleDone(id){ const t=todos.find(t=>t.id===id); if(t) t.done=!t.done; renderTodos(); }
-function deleteTodo(id){ todos=todos.filter(t=>t.id!==id); renderTodos(); }
-function clearDone(){ todos=todos.filter(t=>!t.done); renderTodos(); }
+const priOrder={high:0,med:1,low:2,none:3};
 
 function renderTodos(){
-  const list=document.getElementById('todoList');
-  const empty=document.getElementById('todoEmpty');
-  const flt=todos.filter(t=> fil==='all'?true: fil==='done'?t.done:!t.done);
+  const list=document.getElementById('todoList'), empty=document.getElementById('todoEmpty');
+  const flt=todos.filter(t=>fil==='all'?true:fil==='done'?t.done:!t.done)
+    .sort((a,b)=>{ if(a.done!==b.done) return a.done?1:-1; return (priOrder[a.priority]||3)-(priOrder[b.priority]||3); });
   [...list.children].forEach(c=>{ if(c.id!=='todoEmpty') c.remove(); });
-  if(!flt.length){ empty.style.display='block'; }
-  else {
-    empty.style.display='none';
-    flt.forEach(t=>{
-      const el=document.createElement('div');
-      el.className=`todo-item${t.done?' done':''}`;
-      el.innerHTML=`
-        <div class="todo-check${t.done?' checked':''}" onclick="toggleDone(${t.id})">${t.done?'✓':''}</div>
-        <div class="todo-text">${esc(t.text)}</div>
-        <button class="todo-del" onclick="deleteTodo(${t.id})">✕</button>`;
-      list.appendChild(el);
-    });
-  }
+  if(!flt.length){ empty.style.display='block'; return; }
+  empty.style.display='none';
+  flt.forEach(t=>{
+    const el=document.createElement('div');
+    el.className='todo-item'+(t.done?' done':'')+(activeFocusTask?.id===t.id?' focused':'');
+    el.dataset.id=t.id;
+    const isFocused=activeFocusTask?.id===t.id;
+    el.innerHTML=`<div class="pri-dot ${t.priority||'none'}"></div><div class="todo-check${t.done?' chk':''}" onclick="toggleDone(${t.id})">${t.done?'✓':''}</div><div class="todo-text">${esc(t.text)}</div><button class="todo-focus-btn" onclick="handleFocusClick(${t.id},'${esc(t.text)}')" title="Focus on this task">${isFocused?'◉':'◎'}</button><button class="todo-del" onclick="deleteTodo(${t.id})">✕</button>`;
+    list.appendChild(el);
+  });
   const done=todos.filter(t=>t.done).length;
-  document.getElementById('todoStats').textContent =
-    todos.length===0 ? '0 tasks' : `${done}/${todos.length} complete`;
+  document.getElementById('todoStats').textContent=todos.length===0?'0 tasks':`${done}/${todos.length} complete`;
 }
 
-function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function handleFocusClick(id, text){
+  if(activeFocusTask?.id===id){ clearActiveTask(); }
+  else { setActiveTask(id, text); }
+  renderTodos();
+}
 
-/* ══════════════════════════════════
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+renderTodos();
+
+/* ═══════════════════════════════════════
+   STATS
+═══════════════════════════════════════ */
+function renderStats(){
+  const recs=getSessions(), d=today();
+  const todayRecs=recs.filter(r=>r.date===d&&r.mode==='work');
+  const mins=todayRecs.reduce((a,r)=>a+r.duration,0);
+  document.getElementById('statMinutes').textContent=mins;
+  document.getElementById('statSessions').textContent=todayRecs.length;
+  document.getElementById('statStreak').textContent=getStreak().count;
+  renderHeatmap(recs);
+  renderSessionHistory(recs);
+}
+
+function renderHeatmap(recs){
+  const hm=document.getElementById('heatmap'); hm.innerHTML='';
+  const minutesByDay={};
+  recs.filter(r=>r.mode==='work').forEach(r=>{ minutesByDay[r.date]=(minutesByDay[r.date]||0)+r.duration; });
+  for(let i=27;i>=0;i--){
+    const d=new Date(); d.setDate(d.getDate()-i);
+    const dk=d.toISOString().slice(0,10);
+    const mins=minutesByDay[dk]||0;
+    const intensity=Math.min(1, mins/120);
+    const cell=document.createElement('div');
+    cell.className='hm-day';
+    const accentVal=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    if(mins>0){
+      cell.style.background=accentVal;
+      cell.style.opacity=0.2+intensity*0.8;
+    }
+    const dayLabel=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    cell.title=`${dayLabel}: ${mins} min`;
+    hm.appendChild(cell);
+  }
+}
+
+function renderSessionHistory(recs){
+  const hist=document.getElementById('sessionHistory'); hist.innerHTML='';
+  const moodEmoji=['','😴','😕','😐','🙂','⚡'];
+  [...recs].reverse().slice(0,8).forEach(r=>{
+    if(r.mode!=='work') return;
+    const el=document.createElement('div'); el.className='sess-item';
+    el.innerHTML=`<div class="sess-time">${r.time||''}</div><div class="sess-dur">${r.duration}m</div><div class="sess-task">${r.taskText||'Free focus'}</div><div class="mood-chip">${r.mood?moodEmoji[r.mood]:''}</div>`;
+    hist.appendChild(el);
+  });
+  if(!hist.children.length) hist.innerHTML='<div class="empty-state" style="padding:16px 0"><div class="empty-icon">◈</div>No sessions yet.</div>';
+}
+
+/* ═══════════════════════════════════════
+   END OF DAY REFLECTION
+═══════════════════════════════════════ */
+let focusRating=0;
+
+function openReflection(){
+  const recs=getSessions(), d=today();
+  const todayRecs=recs.filter(r=>r.date===d&&r.mode==='work');
+  document.getElementById('refMinutes').textContent=todayRecs.reduce((a,r)=>a+r.duration,0);
+  document.getElementById('refSessions').textContent=todayRecs.length;
+  document.getElementById('refStreak').textContent=getStreak().count;
+  document.getElementById('refAccomplished').value='';
+  document.getElementById('refCarryover').value='';
+  focusRating=0; updateStars();
+  document.getElementById('reflectionModal').classList.add('show');
+}
+
+function closeReflection(){ document.getElementById('reflectionModal').classList.remove('show'); }
+
+function rateFocus(n){
+  focusRating=n; updateStars();
+}
+
+function updateStars(){
+  document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('lit',i<focusRating));
+}
+
+function saveReflection(){
+  const refs=getReflections();
+  refs.push({ date:today(), accomplished:document.getElementById('refAccomplished').value, carryover:document.getElementById('refCarryover').value, rating:focusRating, ts:Date.now() });
+  localStorage.setItem('sanctum-reflections', JSON.stringify(refs));
+  closeReflection();
+  showToast('Reflection saved. Well done today. ✓');
+}
+
+/* ═══════════════════════════════════════
    QUOTES
-══════════════════════════════════ */
+═══════════════════════════════════════ */
 const quotes=[
   {text:"The secret of getting ahead is getting started. Break overwhelming tasks into small ones, and begin.",author:"Mark Twain"},
   {text:"You don't have to be great to start, but you have to start to be great.",author:"Zig Ziglar"},
@@ -719,32 +964,39 @@ const quotes=[
   {text:"The key is not to prioritize your schedule, but to schedule your priorities.",author:"Stephen Covey"},
   {text:"You don't need more time. You need more focus.",author:"Unknown"},
 ];
-
 let qIdx=Math.floor(Math.random()*quotes.length);
 
 function showQ(i){
   const el=document.getElementById('quoteText'), au=document.getElementById('quoteAuthor');
   el.style.opacity='0'; au.style.opacity='0';
-  setTimeout(()=>{
-    el.textContent=`"${quotes[i].text}"`;
-    au.textContent=`— ${quotes[i].author}`;
-    el.style.opacity='1'; au.style.opacity='1';
-  }, 300);
+  setTimeout(()=>{ el.textContent=`"${quotes[i].text}"`; au.textContent=`— ${quotes[i].author}`; el.style.opacity='1'; au.style.opacity='1'; },300);
 }
 function nextQuote(){ qIdx=(qIdx+1)%quotes.length; showQ(qIdx); }
 function prevQuote(){ qIdx=(qIdx-1+quotes.length)%quotes.length; showQ(qIdx); }
 showQ(qIdx);
-setInterval(()=>{ qIdx=(qIdx+1)%quotes.length; showQ(qIdx); }, 45000);
+setInterval(()=>{ qIdx=(qIdx+1)%quotes.length; showQ(qIdx); },45000);
 
-/* ══════════════════════════════════
+/* ═══════════════════════════════════════
    TOAST
-══════════════════════════════════ */
+═══════════════════════════════════════ */
 let toastT;
 function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
-  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'), 3200);
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),3400);
 }
+
+/* ═══════════════════════════════════════
+   CLOSE MODALS ON BACKDROP CLICK
+═══════════════════════════════════════ */
+document.querySelectorAll('.modal-backdrop').forEach(b=>{
+  b.addEventListener('click', e=>{ if(e.target===b) b.classList.remove('show'); });
+});
+
+/* ═══════════════════════════════════════
+   INIT
+═══════════════════════════════════════ */
+initTheme();
 </script>
 </body>
 </html>
